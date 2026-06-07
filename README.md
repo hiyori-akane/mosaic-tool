@@ -166,12 +166,28 @@ pyinstaller --noconfirm packaging/auto-mosaic.spec
 ### 1. モデル(.pt)を置く
 
 検出モデルは同梱していません（ライセンスのため）。`ntd11_anime_nsfw_segm_v5.pt` を入手し、
-**実行ファイルの隣に `models/` フォルダを作って**入れてください（モデルが無い場合は手動補正のみ動作します）。
+**ホーム配下の `auto-mosaic/models/` に置く**のがおすすめです（`.app` を `/Applications` に
+入れても、再ビルドで上書きされても影響を受けません）。モデルが無い場合は手動補正のみ動作します。
 
 ```
-auto-mosaic.app（または auto-mosaic.exe）と同じ場所に:
-  models/ntd11_anime_nsfw_segm_v5.pt
+# macOS / Windows 共通（最も自然）
+~/auto-mosaic/models/ntd11_anime_nsfw_segm_v5.pt
+  └ macOS:   /Users/<名前>/auto-mosaic/models/...
+  └ Windows: C:\Users\<名前>\auto-mosaic\models\...
 ```
+
+配布物の隣に置く方式でも動きます（上記が無い場合の代替）:
+
+```
+# macOS: auto-mosaic.app と同じフォルダ
+/置き場所/auto-mosaic.app, /置き場所/models/...
+# Windows: auto-mosaic.exe と同じフォルダ
+auto-mosaic\auto-mosaic.exe, auto-mosaic\models\...
+```
+
+探索順は ①`~/auto-mosaic/models` → ②配布物の隣（`.app` と同じ場所 / `.exe` と同じフォルダ）
+→ ③カレント。アプリ起動時にモデルが見つからない場合は、画面右上のステータスに
+**「モデル未検出: ~/auto-mosaic/models に .pt を置いてください」**と表示されます。
 
 ### 2. 起動（未署名のため警告が出ます）
 

@@ -292,7 +292,11 @@
   Bridge.ready().then(async () => {
     try {
       const s = await Bridge.call("get_settings");
-      if (s.detect_error) setStatus("検出エンジン未準備: 手動補正のみ可");
+      if (s.detect_error) {
+        setStatus("検出エンジン未準備: 手動補正のみ可");
+      } else if (!s.model_path) {
+        setStatus("モデル未検出: ~/auto-mosaic/models に .pt を置いてください");
+      }
     } catch (e) { /* noop */ }
     CanvasEditor.init();
     showStep("import");

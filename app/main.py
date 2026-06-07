@@ -14,16 +14,52 @@ WEB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "web")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+def _bundle_dirs():
+    """配布物（実行ファイル / .app バンドル）が置かれた場所の候補。
+
+    Windows の onedir は exe と同じフォルダ、macOS の .app は
+    ``Name.app/Contents/MacOS/exe`` のため「.app と同じ場所」（バンドルの親）
+    も候補に含める。
+    """
+    out = []
+    exe_dir = os.path.dirname(os.path.abspath(sys.executable))
+    out.append(exe_dir)
+    # macOS .app: 実行ファイルから上に辿って .app を見つけ、その親を足す
+    p = exe_dir
+    while p and p != os.path.dirname(p):
+        if p.endswith(".app"):
+            out.append(os.path.dirname(p))
+            break
+        p = os.path.dirname(p)
+    # 実行ファイルフォルダの1つ上も候補（Windows で展開フォルダの隣に置いた場合も拾う）
+    parent = os.path.dirname(exe_dir)
+    if parent and parent != exe_dir:
+        out.append(parent)
+    return out
+
+
+def _user_models_dir():
+    """利用者が置く標準の models フォルダ（~/auto-mosaic/models）。
+
+    .app を /Applications に置く macOS 等では、バンドル隣ではなくホーム配下が
+    自然。Windows でも C:\\Users\\<name>\\auto-mosaic\\models として機能する。
+    """
+    return os.path.join(os.path.expanduser("~"), "auto-mosaic", "models")
+
+
 def _model_search_dirs():
     """models/.pt を探索するディレクトリ群（優先順）。
 
-    通常実行ではリポジトリ直下、PyInstaller 等でフリーズした配布物では
-    実行ファイル隣／カレントディレクトリの models/ も見る（同梱しない
-    モデルを利用者が置けるようにする）。
+    探索順:
+      1. ~/auto-mosaic/models（利用者が置く標準の場所）
+      2. リポジトリ直下 models/（開発時）
+      3. 実行ファイル隣 / .app と同じ場所 / その親（配布物の隣に置いた場合）
+      4. カレントの models/
     """
-    dirs = [os.path.join(ROOT, "models")]
+    dirs = [_user_models_dir(), os.path.join(ROOT, "models")]
     if getattr(sys, "frozen", False):
-        dirs.append(os.path.join(os.path.dirname(sys.executable), "models"))
+        for d in _bundle_dirs():
+            dirs.append(os.path.join(d, "models"))
     dirs.append(os.path.join(os.getcwd(), "models"))
     # 重複を除いて順序を保つ
     seen, out = set(), []

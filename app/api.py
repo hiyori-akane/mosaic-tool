@@ -301,6 +301,7 @@ class Api:
             "mode": self.cfg.mosaic.mode,
             "blur_sigma": self.cfg.mask.blur_sigma,
             "engine": self._engine_name,
+            "model_path": self._model_path,
             "model_loaded": self._engine is not None,
             "detect_error": self._detect_error,
         }
