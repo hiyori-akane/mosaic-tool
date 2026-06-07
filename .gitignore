@@ -1,0 +1,11 @@
+.venv/
+models/
+Pictures/
+__pycache__/
+.DS_Store
+.antigravitycli/
+
+# 実行時の出力
+out/
+.pytest_cache/
+*.egg-info/

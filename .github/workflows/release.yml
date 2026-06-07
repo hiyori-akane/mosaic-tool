@@ -1,0 +1,65 @@
+name: build-desktop
+
+# v* タグの push（例: v0.1.0）で mac .app / Windows .exe をビルドし、
+# 同名のリリースにアセットとして添付する。手動実行（workflow_dispatch）も可。
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write   # リリースへのアセット添付に必要
+
+jobs:
+  build:
+    name: Build ${{ matrix.label }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            label: macOS
+            asset: auto-mosaic-macos
+          - os: windows-latest
+            label: Windows
+            asset: auto-mosaic-windows
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build (PyInstaller)
+        run: pyinstaller --noconfirm packaging/auto-mosaic.spec
+
+      - name: Package (zip)
+        shell: bash
+        run: |
+          cd dist
+          if [ "$RUNNER_OS" = "macOS" ]; then
+            # .app をメタデータ保持で zip 化
+            ditto -c -k --keepParent "auto-mosaic.app" "../${{ matrix.asset }}.zip"
+          else
+            # dist/auto-mosaic/（auto-mosaic.exe 一式）を zip 化
+            7z a -tzip "../${{ matrix.asset }}.zip" "auto-mosaic" >/dev/null
+          fi
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset }}
+          path: ${{ matrix.asset }}.zip
+
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ matrix.asset }}.zip

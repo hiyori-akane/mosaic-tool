@@ -1,0 +1,9 @@
+# auto-mosaic（YOLO GUI / CLI）の依存
+ultralytics==8.4.57   # YOLO segmentation 検出エンジン
+opencv-python         # 画像 I/O・マスク後処理・モザイク
+numpy                 # 配列演算
+pyyaml                # config.yaml の読み込み
+pywebview             # デスクトップ GUI（pywebview ウィンドウ）
+
+# テスト用
+pytest

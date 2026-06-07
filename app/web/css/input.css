@@ -1,0 +1,7 @@
+/* 開発時のみ Tailwind CLI でビルドする入力。
+   配布物には output.css のみ同梱する（CDN は使わない / 仕様 §11）。
+
+   ビルド:
+     npx @tailwindcss/cli -i web/css/input.css -o web/css/output.css --minify
+*/
+@import "tailwindcss";

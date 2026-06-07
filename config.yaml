@@ -1,0 +1,27 @@
+# ============================================================
+# auto-mosaic 共通設定
+# コア(mosaic/) と GUI で共有する既定値。
+# 値は ComfyUI "Mosaic05" ワークフロー由来。
+# ============================================================
+
+groups:
+  genital:
+    classes: [pussy, penis, testicles, anus, sex, cross_section, xray, x-ray, cross-section]
+    conf: 0.50        # 検出しきい値
+    dilate_px: 2      # 検出ごとの膨張
+  nipple:
+    classes: [nipple, nipples]
+    conf: 0.01        # 低conf = 高Recall（とりこぼし回避）
+    dilate_px: 50     # 検出ごとの膨張
+    grow_px: 10       # グループ合成後の追加膨張
+
+mask:
+  overall_grow_px: 2  # 全体合成後の膨張
+  blur_sigma: 10      # 縁のぼかし(ガウシアン)
+  drop_size_px: 10    # 辺長がこれ未満の検出は無視
+
+mosaic:
+  mode: fixed         # fixed | longside
+  block_px: 10        # fixed時のブロックサイズ（UI: モザイク強度）
+  longside_div: 100   # longside時: max(min_block_px, longside // div)
+  min_block_px: 4

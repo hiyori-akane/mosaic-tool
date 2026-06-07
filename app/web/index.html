@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>auto-mosaic</title>
+  <link rel="stylesheet" href="css/output.css" />
+</head>
+<body class="bg-slate-900 text-slate-100">
+  <!-- ヘッダ（ステップ表示） -->
+  <header class="topbar">
+    <h1 class="title">auto-mosaic</h1>
+    <ol class="steps" id="stepper">
+      <li data-step="import" class="step is-active">1. 取り込み</li>
+      <li data-step="detect" class="step">2. 検出</li>
+      <li data-step="review" class="step">3. 補正</li>
+      <li data-step="export" class="step">4. 書き出し</li>
+    </ol>
+    <span id="status-line" class="status"></span>
+  </header>
+
+  <main class="main">
+    <!-- Step 1: 取り込み -->
+    <section id="view-import" class="view">
+      <div class="panel center">
+        <p class="hint">画像ファイル または フォルダを取り込みます（png/jpg/jpeg/webp）。<br>取り込むと自動で検出が始まり、1枚ずつ補正できます。</p>
+        <div class="row" style="justify-content:center">
+          <button id="btn-pick-files" class="btn primary">ファイルを選択</button>
+          <button id="btn-pick-folder" class="btn">フォルダを選択</button>
+        </div>
+        <div id="dropzone" class="dropzone">ここにドラッグ&amp;ドロップ</div>
+      </div>
+    </section>
+
+    <!-- Step 2: 検出中 -->
+    <section id="view-detect" class="view hidden">
+      <div class="panel center">
+        <p class="hint" id="detect-msg">検出中…</p>
+        <div class="progress wide" id="detect-progress"><div class="bar"></div></div>
+        <p class="muted" id="detect-count"></p>
+      </div>
+    </section>
+
+    <!-- Step 3: 補正（1枚ずつ） -->
+    <section id="view-review" class="view hidden">
+      <div class="edit-toolbar">
+        <div class="group">
+          <span id="review-pos" class="pos"></span>
+          <button id="btn-to-detect" class="btn">検出に戻る</button>
+        </div>
+        <div class="group">
+          <button data-tool="add" class="btn tool is-active">追加ブラシ</button>
+          <button data-tool="remove" class="btn tool">削除ブラシ</button>
+        </div>
+        <label class="ctrl">ブラシ <input id="brush-size" type="range" min="4" max="120" value="32" /></label>
+        <label class="ctrl">モザイク強度 <input id="block-size" type="range" min="4" max="64" value="10" /><span id="block-val">10</span></label>
+        <div class="group">
+          <button id="btn-undo" class="btn">元に戻す</button>
+          <button id="btn-redo" class="btn">やり直し</button>
+          <button id="btn-zoom-in" class="btn">＋</button>
+          <button id="btn-zoom-out" class="btn">－</button>
+          <button id="btn-redetect" class="btn">再検出</button>
+          <button id="btn-apply" class="btn accent">適用してプレビュー</button>
+        </div>
+        <div class="group nav">
+          <button id="btn-prev" class="btn">← 前へ</button>
+          <button id="btn-next" class="btn primary">次へ →</button>
+        </div>
+      </div>
+      <div id="canvas-wrap" class="canvas-wrap">
+        <canvas id="canvas-image"></canvas>
+        <canvas id="canvas-overlay"></canvas>
+      </div>
+    </section>
+
+    <!-- Step 4: 書き出し -->
+    <section id="view-export" class="view hidden">
+      <div class="panel center">
+        <p class="hint">すべての補正が終わりました。出力先を確認して書き出します。</p>
+        <div class="row" style="justify-content:center">
+          <button id="btn-out-dir" class="btn">出力先を変更</button>
+          <span id="out-dir" class="muted"></span>
+        </div>
+        <label class="ctrl" style="justify-content:center">形式
+          <select id="out-format"><option value="png">PNG</option><option value="jpg">JPG</option></select>
+        </label>
+        <div class="row" style="justify-content:center">
+          <button id="btn-back-review" class="btn">← 補正に戻る</button>
+          <button id="btn-export" class="btn primary">書き出し</button>
+        </div>
+        <div class="progress wide hidden" id="export-progress"><div class="bar"></div></div>
+        <div id="export-result" class="muted"></div>
+        <div class="row hidden" id="done-row" style="justify-content:center">
+          <button id="btn-new-batch" class="btn primary">新しい画像を取り込む</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    検出は補助です。とりこぼし／誤検出は必ず目視で補正してから書き出してください（完全オフライン処理）。
+  </footer>
+
+  <script src="js/api-stub.js"></script>
+  <script src="js/bridge.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/canvas.js"></script>
+  <script src="js/views.js"></script>
+</body>
+</html>

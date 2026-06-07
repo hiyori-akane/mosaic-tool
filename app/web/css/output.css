@@ -1,0 +1,109 @@
+/* 同梱用スタイル（オフライン・CDN不使用）。
+   Node/Tailwind CLI を使わずに済むよう、利用クラス相当を手書きで定義。
+   開発で Tailwind を使う場合は input.css からこのファイルを再生成して差し替え可。 */
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  display: flex; flex-direction: column;
+}
+.bg-slate-900 { background: #0f172a; }
+.text-slate-100 { color: #f1f5f9; }
+.hidden { display: none !important; }
+
+/* topbar */
+.topbar {
+  display: flex; align-items: center; gap: 1rem;
+  padding: .6rem 1rem; background: #1e293b; border-bottom: 1px solid #334155;
+}
+.title { font-size: 1.05rem; font-weight: 700; margin: 0; }
+.tabs { display: flex; gap: .25rem; }
+.tab {
+  background: transparent; color: #cbd5e1; border: 1px solid transparent;
+  padding: .35rem .8rem; border-radius: .4rem; cursor: pointer; font-size: .9rem;
+}
+.tab:hover { background: #334155; }
+.tab.is-active { background: #2563eb; color: #fff; }
+.status { margin-left: auto; font-size: .8rem; color: #94a3b8; }
+
+/* stepper（ウィザードの進捗表示） */
+.steps { display: flex; gap: .4rem; list-style: none; margin: 0; padding: 0; }
+.step {
+  color: #94a3b8; border: 1px solid #334155; background: #0f172a;
+  padding: .3rem .8rem; border-radius: 999px; font-size: .82rem; white-space: nowrap;
+}
+.step.is-active { background: #2563eb; border-color: #2563eb; color: #fff; font-weight: 600; }
+.step.is-done { background: #14532d; border-color: #166534; color: #bbf7d0; }
+.pos { font-size: .9rem; font-weight: 600; color: #e2e8f0; }
+
+/* main / views */
+.main { flex: 1; overflow: auto; padding: 1rem; }
+.view { height: 100%; }
+.panel { background: #1e293b; border: 1px solid #334155; border-radius: .6rem; padding: 1.2rem; max-width: 720px; }
+.panel.center { margin: 3rem auto; text-align: center; }
+.row { display: flex; gap: .6rem; align-items: center; margin: .6rem 0; flex-wrap: wrap; }
+.hint { color: #cbd5e1; margin-bottom: 1rem; }
+.muted { color: #94a3b8; font-size: .85rem; }
+.warn { color: #fbbf24; background: #422006; border: 1px solid #92400e; padding: .5rem .8rem; border-radius: .4rem; margin: .5rem 0; }
+
+/* buttons */
+.btn {
+  background: #334155; color: #e2e8f0; border: 1px solid #475569;
+  padding: .4rem .9rem; border-radius: .4rem; cursor: pointer; font-size: .88rem;
+}
+.btn:hover { background: #475569; }
+.btn.primary { background: #2563eb; border-color: #2563eb; color: #fff; }
+.btn.primary:hover { background: #1d4ed8; }
+.btn.tool.is-active { background: #0ea5e9; border-color: #0ea5e9; color: #fff; }
+/* 強調ボタン（追加ブラシのアクセント色と揃える）。例: 適用してプレビュー */
+.btn.accent { background: #0ea5e9; border-color: #0ea5e9; color: #fff; }
+.btn.accent:hover { background: #0284c7; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn:disabled:hover { background: #334155; }
+
+/* 補正ツールバー: ナビ（前へ/次へ）を右端へ */
+.edit-toolbar .group.nav { margin-left: auto; }
+
+/* dropzone */
+.dropzone {
+  margin-top: 1.2rem; padding: 2.5rem; border: 2px dashed #475569;
+  border-radius: .6rem; color: #94a3b8;
+}
+.dropzone.drag { border-color: #38bdf8; color: #e0f2fe; }
+
+/* toolbar */
+.toolbar, .edit-toolbar {
+  display: flex; gap: .8rem; align-items: center; flex-wrap: wrap;
+  padding: .5rem .7rem; background: #1e293b; border: 1px solid #334155;
+  border-radius: .5rem; margin-bottom: .8rem;
+}
+.group { display: flex; gap: .35rem; align-items: center; }
+.ctrl { display: flex; gap: .35rem; align-items: center; font-size: .85rem; color: #cbd5e1; }
+.ctrl input[type="text"] { background: #0f172a; border: 1px solid #475569; color: #e2e8f0; padding: .3rem .5rem; border-radius: .3rem; }
+select { background: #0f172a; border: 1px solid #475569; color: #e2e8f0; padding: .3rem; border-radius: .3rem; }
+
+/* grid */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .8rem; }
+.card { background: #1e293b; border: 1px solid #334155; border-radius: .5rem; overflow: hidden; cursor: pointer; }
+.card:hover { border-color: #38bdf8; }
+.card img { width: 100%; height: 140px; object-fit: contain; background: #0b1220; display: block; }
+.card .meta { padding: .4rem .6rem; display: flex; justify-content: space-between; align-items: center; }
+.card .name { font-size: .78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; }
+.badge { font-size: .68rem; padding: .12rem .45rem; border-radius: .8rem; }
+.badge.none { background: #475569; }
+.badge.detected { background: #0369a1; }
+.badge.reviewed { background: #15803d; }
+
+/* progress */
+.progress { width: 220px; height: 8px; background: #0f172a; border-radius: 4px; overflow: hidden; }
+.progress.wide { width: 100%; max-width: 420px; height: 12px; margin: 1rem auto; }
+.progress .bar { height: 100%; width: 0; background: #2563eb; transition: width .15s; }
+
+/* canvas */
+.canvas-wrap { position: relative; width: 100%; height: calc(100vh - 220px); overflow: auto; background: #0b1220; border: 1px solid #334155; border-radius: .5rem; }
+.canvas-wrap canvas { position: absolute; top: 0; left: 0; transform-origin: top left; }
+#canvas-overlay { cursor: crosshair; }
+
+/* footer */
+.footer { padding: .5rem 1rem; font-size: .72rem; color: #94a3b8; background: #1e293b; border-top: 1px solid #334155; }
