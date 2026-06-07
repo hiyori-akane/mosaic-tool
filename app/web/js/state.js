@@ -7,7 +7,7 @@ window.AppState = {
   view: {             // get_view の戻り（補正中）
     scale: 1, dispW: 0, dispH: 0, blockPx: 10,
   },
-  outDir: "out",      // 既定の出力先（書き出し時に変更可）
+  outDir: "out",      // 既定の出力先（起動時に ~/auto-mosaic/out へ更新・変更可）
   jobs: {},           // job_id -> {kind, ...}
 
   setItems(items) {

@@ -93,6 +93,14 @@ def test_add_brush_overrides_previous_remove(tmp_path):
     assert api.session.get(item_id).final_mask()[h // 2, w // 2] == 255
 
 
+def test_default_out_dir_under_home(tmp_path, monkeypatch):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.setenv("USERPROFILE", str(tmp_path))  # Windows 用
+    api = _api(tmp_path)
+    s = api.get_settings()
+    assert s["default_out_dir"] == str(tmp_path / "auto-mosaic" / "out")
+
+
 def test_check_unreviewed_warns(tmp_path):
     src = str(tmp_path / "a.png")
     _write_sample(src)

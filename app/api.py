@@ -304,6 +304,8 @@ class Api:
             "model_path": self._model_path,
             "model_loaded": self._engine is not None,
             "detect_error": self._detect_error,
+            "default_out_dir": os.path.join(
+                os.path.expanduser("~"), "auto-mosaic", "out"),
         }
 
     def save_settings(self, settings: dict) -> dict:

@@ -206,6 +206,11 @@ auto-mosaic\auto-mosaic.exe, auto-mosaic\models\...
 > 正式に署名済みで配布する場合は、Apple Developer の署名/notarization、Windows のコード署名
 > 証明書が別途必要です（将来対応予定）。
 
+### 3. 書き出し先
+
+書き出しの既定の出力先は **`~/auto-mosaic/out`** です（書き出し画面の「出力先を変更」で変更可）。
+元画像は上書きしません。
+
 ## ライセンス
 
 本リポジトリの**ソースコード**は **GNU AGPL-3.0**（`LICENSE`）で配布します。

@@ -292,6 +292,7 @@
   Bridge.ready().then(async () => {
     try {
       const s = await Bridge.call("get_settings");
+      if (s.default_out_dir) S.outDir = s.default_out_dir;
       if (s.detect_error) {
         setStatus("検出エンジン未準備: 手動補正のみ可");
       } else if (!s.model_path) {
