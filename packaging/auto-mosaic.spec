@@ -8,12 +8,21 @@
 #    検出を省いて手動補正のみの軽量ビルドにしたい場合は HEAVY_PKGS から
 #    "torch"/"torchvision"/"ultralytics" を外す。
 #  - モデル(.pt)はライセンス上同梱しない。利用者が実行ファイル隣の models/ に置く。
+import os
 import sys
 
 from PyInstaller.utils.hooks import collect_all
 
+# spec 内の相対パスは spec のあるディレクトリ基準で解決される。
+# プロジェクトルートを SPECPATH から求め、エントリ/データを絶対パスで渡す
+# （どの作業ディレクトリから実行しても壊れないようにする）。
+ROOT = os.path.dirname(os.path.abspath(SPECPATH))  # noqa: F821 (PyInstaller 注入)
+
 # 同梱する静的アセット（GUI と既定設定）
-datas = [("app/web", "app/web"), ("config.yaml", ".")]
+datas = [
+    (os.path.join(ROOT, "app", "web"), "app/web"),
+    (os.path.join(ROOT, "config.yaml"), "."),
+]
 binaries = []
 hiddenimports = []
 
@@ -29,8 +38,8 @@ for pkg in HEAVY_PKGS:
     hiddenimports += h
 
 a = Analysis(
-    ["desktop.py"],
-    pathex=[],
+    [os.path.join(ROOT, "desktop.py")],
+    pathex=[ROOT],
     binaries=binaries,
     datas=datas,
     hiddenimports=hiddenimports,
